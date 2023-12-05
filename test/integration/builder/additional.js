@@ -4,7 +4,7 @@
 
 module.exports = function(knex) {
 
-  var _ = require('lodash');
+  const _ = require('lodash');
 
   describe('Additional', function () {
 
@@ -33,7 +33,7 @@ module.exports = function(knex) {
     });
 
     it('should allow raw queries directly with `knex.raw`', function() {
-      var tables = {
+      const tables = {
         mysql: 'SHOW TABLES',
         mysql2: 'SHOW TABLES',
         mariadb: 'SHOW TABLES',
@@ -212,14 +212,14 @@ module.exports = function(knex) {
     });
 
     it('should allow renaming a column', function() {
-      var countColumn
+      let countColumn
       console.log(knex.client.dialect);
       switch (knex.client.dialect) {
         case 'oracle': countColumn = 'COUNT(*)'; break;
         case 'mssql': countColumn = ''; break;
         default: countColumn = 'count(*)'; break;
       }
-      var count, inserts = [];
+      let count, inserts = [];
       _.times(40, function(i) {
         inserts.push({email: 'email'+ i, first_name: 'Test', last_name: 'Data'});
       });
@@ -255,13 +255,13 @@ module.exports = function(knex) {
     });
 
     it('should allow dropping a column', function() {
-      var countColumn
+      let countColumn
       switch (knex.client.dialect) {
         case 'oracle': countColumn = 'COUNT(*)'; break;
         case 'mssql': countColumn = ''; break;
         default: countColumn = 'count(*)'; break;
       }
-      var count;
+      let count;
       return knex.count('*').from('accounts').then(function(resp) {
         count = resp[0][countColumn];
       }).then(function() {
@@ -288,9 +288,9 @@ module.exports = function(knex) {
 
 
     it('.timeout() should throw TimeoutError', function(done) {
-      var dialect = knex.client.config.dialect;
+      const dialect = knex.client.config.dialect;
       if(dialect === 'sqlite3') { return done(); } //TODO -- No built-in support for sleeps
-      var testQueries = {
+      const testQueries = {
         'postgres': function() {
           return knex.raw('SELECT pg_sleep(1)');
         },
@@ -321,7 +321,7 @@ module.exports = function(knex) {
         return done(new Error('Missing test query for dialect: ' + dialect));
       }
 
-      var query = testQueries[dialect]();
+      const query = testQueries[dialect]();
 
       return query.timeout(1)
         .then(function() {
@@ -339,9 +339,9 @@ module.exports = function(knex) {
 
 
     it('Event: query-response', function() {
-      var queryCount = 0;
+      let queryCount = 0;
 
-      var onQueryResponse = function(response, obj, builder) {
+      const onQueryResponse = function(response, obj, builder) {
         queryCount++;
         expect(response).to.be.an('array');
         expect(obj).to.be.an('object');
@@ -364,8 +364,8 @@ module.exports = function(knex) {
 
 
     it('Event: query-error', function() {
-      var queryCount = 0;
-      var onQueryError = function(error, obj) {
+      let queryCount = 0;
+      const onQueryError = function(error, obj) {
         queryCount++;
         expect(obj).to.be.an('object');
         expect(obj.__knexUid).to.be.a('string');

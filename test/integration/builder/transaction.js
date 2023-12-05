@@ -2,9 +2,9 @@
 
 'use strict';
 
-var Promise = testPromise;
-var Knex   = require('../../../knex');
-var _ = require('lodash');
+const Promise = testPromise;
+const Knex   = require('../../../knex');
+const _ = require('lodash');
 
 module.exports = function(knex) {
 
@@ -19,7 +19,7 @@ module.exports = function(knex) {
 
     it('should be able to commit transactions', function() {
 
-      var id = null;
+      let id = null;
       return knex.transaction(function(t) {
         knex('accounts')
           .transacting(t)
@@ -51,8 +51,8 @@ module.exports = function(knex) {
     });
 
     it('should be able to rollback transactions', function() {
-      var id = null;
-      var err = new Error('error message');
+      let id = null;
+      const err = new Error('error message');
       return knex.transaction(function(t) {
         knex('accounts')
           .transacting(t)
@@ -84,7 +84,7 @@ module.exports = function(knex) {
 
     it('should be able to commit transactions with a resolved trx query', function() {
 
-      var id = null;
+      let id = null;
       return knex.transaction(function(trx) {
         return trx('accounts')
           .returning('id')
@@ -114,9 +114,9 @@ module.exports = function(knex) {
     });
 
     it('should be able to rollback transactions with rejected trx query', function() {
-      var id = null;
-      var err = new Error('error message');
-      var __knexUid, count = 0;
+      let id = null;
+      const err = new Error('error message');
+      let __knexUid, count = 0;
       return knex.transaction(function(trx) {
         return trx('accounts')
           .returning('id')
@@ -148,7 +148,7 @@ module.exports = function(knex) {
       .catch(function(msg) {
         // oracle & mssql & sqlanywhere:
 	// BEGIN & ROLLBACK not reported as queries
-        var expectedCount =
+        const expectedCount =
           knex.client.dialect === 'oracle' ||
           knex.client.dialect === 'mssql' ||
           knex.client.dialect === 'sqlanywhere' ? 2 : 4;
@@ -162,8 +162,8 @@ module.exports = function(knex) {
     });
 
     it('should be able to run schema methods', function() {
-      var __knexUid, count = 0;
-      var err = new Error('error message');
+      let __knexUid, count = 0;
+      const err = new Error('error message');
       if (knex.client.dialect === 'postgresql') {
         return knex.transaction(function(trx) {
           return trx.schema.createTable('test_schema_transactions', function(table) {
@@ -175,7 +175,7 @@ module.exports = function(knex) {
             }).then(function() {
               return trx('test_schema_transactions').count('*');
             }).then(function(resp) {
-              var _count = parseInt(resp[0].count, 10);
+              const _count = parseInt(resp[0].count, 10);
               expect(_count).to.equal(1);
               throw err;
             });
@@ -194,7 +194,7 @@ module.exports = function(knex) {
           expect(e.message).to.equal('select count(*) from \"test_schema_migrations\" - relation "test_schema_migrations" does not exist');
         });
       } else {
-        var id = null;
+        let id = null;
         return knex.transaction(function(trx) {
           return trx('accounts')
             .returning('id')
@@ -261,7 +261,7 @@ module.exports = function(knex) {
     })
 
     it('#855 - Query Event should trigger on Transaction Client AND main Client', function(done) {
-      var queryEventTriggered = false;
+      let queryEventTriggered = false;
 
       knex.once('query', function(queryData) {
         queryEventTriggered = true;
@@ -283,14 +283,14 @@ module.exports = function(knex) {
 
     it('#1040, #1171 - When pool is filled with transaction connections, Non-transaction queries should not hang the application, but instead throw a timeout error', function() {
       //To make this test easier, I'm changing the pool settings to max 1.
-      var knexConfig = _.clone(knex.client.config);
+      const knexConfig = _.clone(knex.client.config);
       knexConfig.pool.min = 0;
       knexConfig.pool.max = 1;
       knexConfig.acquireConnectionTimeout = 1000;
 
-      var knexDb = new Knex(knexConfig);
+      const knexDb = new Knex(knexConfig);
 
-      var rawQuery = knex.client.dialect === 'sqlanywhere' ? 'SELECT 1' : 'SELECT 1 = 1';
+      const rawQuery = knex.client.dialect === 'sqlanywhere' ? 'SELECT 1' : 'SELECT 1 = 1';
 
       //Create a transaction that will occupy the only available connection, and avoid trx.commit.
      return knexDb.transaction(function(trx) {

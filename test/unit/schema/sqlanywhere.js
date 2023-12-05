@@ -2,13 +2,13 @@
 
 'use strict';
 
-var Sqlanywhere_Client = require('../../../lib/dialects/sqlanywhere');
-var client        = new Sqlanywhere_Client({})
+const Sqlanywhere_Client = require('../../../lib/dialects/sqlanywhere');
+const client        = new Sqlanywhere_Client({})
 
 describe("Sqlanywhere SchemaBuilder", function() {
 
-  var tableSql;
-  var equal = require('assert').equal;
+  let tableSql;
+  const equal = require('assert').equal;
 
   it('test basic create table with charset and collate', function() {
     tableSql = client.schemaBuilder().createTable('users', function(table) {

@@ -2,10 +2,10 @@
 /*jshint -W030 */
 'use strict';
 
-var equal    = require('assert').equal;
-var path     = require('path');
-var rimraf   = require('rimraf');
-var Promise  = require('../../../lib/promise');
+const equal    = require('assert').equal;
+const path     = require('path');
+const rimraf   = require('rimraf');
+const Promise  = require('../../../lib/promise');
 
 module.exports = function(knex) {
 
@@ -32,7 +32,7 @@ module.exports = function(knex) {
       });
     });
 
-    var tables = ['migration_test_1', 'migration_test_2', 'migration_test_2_1'];
+    const tables = ['migration_test_1', 'migration_test_2', 'migration_test_2_1'];
 
     describe('knex.migrate.status', function() {
 
@@ -249,7 +249,7 @@ module.exports = function(knex) {
         return knex.migrate.rollback({directory: 'test/integration/migrate/test'}).spread(function(batchNo, log) {
           expect(batchNo).to.equal(1);
           expect(log).to.have.length(2);
-          var migrationPath = ['test', 'integration', 'migrate', 'test'].join(path.sep); //Test fails on windows if explicitly defining /test/integration/.. ~wubzz
+          const migrationPath = ['test', 'integration', 'migrate', 'test'].join(path.sep); //Test fails on windows if explicitly defining /test/integration/.. ~wubzz
           expect(log[0]).to.contain(migrationPath);
           return knex('knex_migrations').select('*').then(function(data) {
             expect(data.length).to.equal(0);
