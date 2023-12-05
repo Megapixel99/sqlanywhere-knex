@@ -11,6 +11,7 @@ const dbNameToDialectLoader: Record<string, () => any> = Object.freeze({
   pgnative: () => require('./pgnative'),
   postgres: () => require('./postgres'),
   redshift: () => require('./redshift'),
+  sqlanywhere: () => require('./sqlanywhere'),
   sqlite3: () => require('./sqlite3'),
 });
 
